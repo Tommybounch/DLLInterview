@@ -27,8 +27,14 @@ const users = [
 router.get('/', (req: Request, res: Response) => {
   console.log('GET /api/users');
   //Parse parameters
-  const size = parseInt(req.query.size as string) || 10;
-  const page = parseInt(req.query.page as string) || 1;
+  const size = Number.isNaN(parseInt(req.query.size as string))
+    ? 10
+    : parseInt(req.query.size as string);
+
+  const page = Number.isNaN(parseInt(req.query.size as string))
+    ? 1
+    : parseInt(req.query.page as string);
+
   const sortField = (req.query.sortField as string) || 'id';
   console.log(`size: ${size}, page: ${page}, sortField: ${sortField}`);
 

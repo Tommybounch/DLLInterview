@@ -1,0 +1,39 @@
+The following are manual curl tests to test against the back-end API. 
+The front-end provided can also be used to manually test.
+
+Valid Cases -
+    Case 1: totalResults = 5, size = 2 => maxPage = 3
+        # Page 1
+        curl "http://localhost:3001/api/users?size=2&page=1&sortField=id"
+
+        # Page 2
+        curl "http://localhost:3001/api/users?size=2&page=2&sortField=id"
+
+        # Page 3
+        curl "http://localhost:3001/api/users?size=2&page=3&sortField=id"
+
+    Case 2: totalResults = 5, size = 10 => maxPage = 1
+        # Page 1
+        curl "http://localhost:3001/api/users?size=10&page=1&sortField=id"
+
+Invalid Cases -
+    Case 3: totalResults = 5, size = 2 => maxPage = 3
+        # Page 4
+        curl "http://localhost:3001/api/users?size=2&page=4&sortField=id"
+
+    Case 4: totalResults = 5, size = 10 => maxPage = 1
+        # Page 2
+        curl "http://localhost:3001/api/users?size=10&page=2&sortField=id"
+
+    Case 5: Negative page or size
+        # Negative page
+        curl "http://localhost:3001/api/users?size=2&page=-1&sortField=id"
+
+        # Zero page
+        curl "http://localhost:3001/api/users?size=2&page=0&sortField=id"
+
+        # Negative size
+        curl "http://localhost:3001/api/users?size=-1&page=1&sortField=id"
+
+        # Zero size (edge case, should fail validation)
+        curl "http://localhost:3001/api/users?size=0&page=1&sortField=id"
