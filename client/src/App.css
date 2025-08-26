@@ -51,10 +51,24 @@
   overflow-y: scroll;
 }
 
+.paginationInfo {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
 .navigationButtons {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: 1%;
-  margin-right: 1%;
+  width: 100%;
+}
+
+.totalResults {
+  align-items: center;
+  font-weight: bold;
+}
+
+.nextButton {
+  margin-left: auto !important;
 }

@@ -30,6 +30,7 @@ router.get('/', (req: Request, res: Response) => {
   const size = parseInt(req.query.size as string) || 10;
   const page = parseInt(req.query.page as string) || 1;
   const sortField = (req.query.sortField as string) || 'id';
+  console.log(`size: ${size}, page: ${page}, sortField: ${sortField}`);
 
   //Pagination
   const totalResults = users.length;
@@ -47,6 +48,7 @@ router.get('/', (req: Request, res: Response) => {
 
   const paginatedUsers = sortedUsers.slice(start, end);
 
+  //Build paging URLs
   const baseUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
   const paging: { previous?: string; next?: string; totalResults: number } = {
     totalResults,
@@ -54,10 +56,12 @@ router.get('/', (req: Request, res: Response) => {
   if (page > 1) {
     paging.previous = `${baseUrl}?size=${size}&page=${
       page - 1
-    }&sort=${sortField}`;
+    }&sortField=${sortField}`;
   }
   if (end < totalResults) {
-    paging.next = `${baseUrl}?size=${size}&page=${page + 1}&sort=${sortField}`;
+    paging.next = `${baseUrl}?size=${size}&page=${
+      page + 1
+    }&sortField=${sortField}`;
   }
 
   console.log(paginatedUsers);
