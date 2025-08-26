@@ -32,10 +32,36 @@ router.get('/', (req: Request, res: Response) => {
   const sortField = (req.query.sortField as string) || 'id';
   console.log(`size: ${size}, page: ${page}, sortField: ${sortField}`);
 
+  //Input validation
+  if (isNaN(size) || size <= 0) {
+    return res
+      .status(400)
+      .json({ error: 'Invalid size parameter. Must be a positive integer.' });
+  }
+
+  if (isNaN(page) || page <= 0) {
+    return res
+      .status(400)
+      .json({ error: 'Invalid page parameter. Must be a positive integer.' });
+  }
+
+  const validFields = Object.keys(users[0]);
+  if (!validFields.includes(sortField)) {
+    return res.status(400).json({
+      error: `Invalid sortField. Must be one of: ${validFields.join(', ')}`,
+    });
+  }
   //Pagination
   const totalResults = users.length;
+  const maxPage = Math.ceil(totalResults / size);
   const start = (page - 1) * size;
   const end = start + size;
+
+  if (page > maxPage) {
+    return res.status(400).json({
+      error: `Invalid page parameter. Maximum page for size=${size} is ${maxPage}.`,
+    });
+  }
 
   //Sorting
   const sortedUsers = [...users].sort((a, b) => {
