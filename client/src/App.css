@@ -22,3 +22,12 @@
   background-color: lightgray;
   width: 100%;
 }
+
+.userHeaders {
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  gap: 3%;
+  font-size: large;
+}

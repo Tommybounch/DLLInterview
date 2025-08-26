@@ -36,7 +36,10 @@ function App() {
           </FormControl>
         </div>
         <div className="resultsPanel">
-          <h2>User List</h2>
+          <div className="userHeaders">
+            <div className="userHeader">ID</div>
+            <div className="userHeader">First Name</div>
+          </div>
         </div>
       </div>
     </div>
