@@ -25,6 +25,7 @@ const users = [
 ];
 
 router.get('/', (req: Request, res: Response) => {
+  console.log('GET /api/users');
   //Parse parameters
   const size = parseInt(req.query.size as string) || 10;
   const page = parseInt(req.query.page as string) || 1;
@@ -36,7 +37,6 @@ router.get('/', (req: Request, res: Response) => {
   const end = start + size;
 
   //Sorting
-
   const sortedUsers = [...users].sort((a, b) => {
     if (a[sortField as keyof typeof a] < b[sortField as keyof typeof b])
       return -1;
@@ -60,6 +60,8 @@ router.get('/', (req: Request, res: Response) => {
     paging.next = `${baseUrl}?size=${size}&page=${page + 1}&sort=${sortField}`;
   }
 
+  console.log(paginatedUsers);
+  console.log(paging);
   res.json({ data: paginatedUsers, paging });
 });
 
