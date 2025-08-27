@@ -37,3 +37,6 @@ Invalid Cases -
 
         # Zero size (edge case, should fail validation)
         curl "http://localhost:3001/api/users?size=0&page=1&sortField=id"
+
+        curl "http://localhost:3001/api/users?size=5&page=1&sortField=department"
+        curl "http://localhost:3001/api/users?size=5&page=1&sortField=dateHired"

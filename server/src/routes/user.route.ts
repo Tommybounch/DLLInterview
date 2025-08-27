@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 
 const router = express.Router();
-const users = [
+/*const users = [
   {
     name: 'Jorn',
     id: 0,
@@ -22,7 +22,67 @@ const users = [
     name: 'Mike',
     id: 1,
   },
+];*/
+
+const users = [
+  {
+    name: 'Jorn',
+    id: 0,
+    department: 'IT',
+    dateHired: new Date('2022-09-02T16:27:24.999Z'),
+  },
+  {
+    name: 'Markus',
+    id: 3,
+    department: 'HR',
+    dateHired: new Date('2023-01-24T16:27:24.999Z'),
+  },
+  {
+    name: 'Andrew',
+    id: 2,
+    department: 'HR',
+    dateHired: new Date('2022-03-22T16:27:24.999Z'),
+  },
+  {
+    name: 'Ori',
+    id: 4,
+    department: 'FINANCE',
+    dateHired: new Date('2019-07-04T16:27:24.999Z'),
+  },
+  {
+    name: 'Mike',
+    id: 1,
+    department: 'IT',
+    dateHired: new Date('2010-12-16T16:27:24.999Z'),
+  },
 ];
+
+const sortFunctions = (sortField: string, sortOrder: string) => {
+  console.log(sortField);
+  if (sortOrder === 'asc') {
+    console.log('Sorting Ascending');
+    return [...users].sort((a, b) => {
+      if (a[sortField as keyof typeof a] < b[sortField as keyof typeof b])
+        return -1;
+      if (a[sortField as keyof typeof a] > b[sortField as keyof typeof b])
+        return 1;
+      return 0;
+    });
+  } else {
+    let descSortField = sortField.slice(1);
+    return [...users].sort((a, b) => {
+      if (
+        a[descSortField as keyof typeof a] > b[descSortField as keyof typeof b]
+      )
+        return -1;
+      if (
+        a[descSortField as keyof typeof a] < b[descSortField as keyof typeof b]
+      )
+        return 1;
+      return 0;
+    });
+  }
+};
 
 router.get('/', (req: Request, res: Response) => {
   console.log('GET /api/users');
@@ -52,7 +112,13 @@ router.get('/', (req: Request, res: Response) => {
   }
 
   const validFields = Object.keys(users[0]);
-  if (!validFields.includes(sortField)) {
+
+  let sortOrder = 'asc';
+
+  if (validFields.includes(sortField)) {
+  } else if (validFields.includes(sortField.slice(1))) {
+    sortOrder = sortField.slice(1);
+  } else {
     return res.status(400).json({
       error: `Invalid sortField. Must be one of: ${validFields.join(', ')}`,
     });
@@ -70,13 +136,10 @@ router.get('/', (req: Request, res: Response) => {
   }
 
   //Sorting
-  const sortedUsers = [...users].sort((a, b) => {
-    if (a[sortField as keyof typeof a] < b[sortField as keyof typeof b])
-      return -1;
-    if (a[sortField as keyof typeof a] > b[sortField as keyof typeof b])
-      return 1;
-    return 0;
-  });
+  const sortedUsers = sortFunctions(sortField, sortOrder);
+  console.log('Sorted Users:');
+  console.log(sortedUsers);
+  console.log('--------------------');
 
   const paginatedUsers = sortedUsers.slice(start, end);
 
